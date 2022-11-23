@@ -21,4 +21,15 @@ public class Path {
         }
         return cost;
     }
+
+    public Path copy(){
+        Path cp = new Path();
+        for(int i = 0; i < this.points.size(); i++){
+            cp.points.add(this.points.get(i));
+        }
+        for(int i = 0; i < this.characters.size(); i++){
+            cp.characters.add(this.characters.get(i));
+        }
+        return cp;
+    }
 }
