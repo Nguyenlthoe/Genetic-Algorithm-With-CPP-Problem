@@ -60,7 +60,7 @@ public class Matrix {
         return points;
     }
 
-    private static int left(int direct, int start){
+    public static int left(int direct, int start){
         int startX = start / y;
         int startY = start % y;
         int directX = direct / y;
@@ -76,7 +76,7 @@ public class Matrix {
         }
     }
 
-    private static int right(int direct, int start){
+    public static int right(int direct, int start){
         int startX = start / y;
         int startY = start % y;
         int directX = direct / y;
@@ -91,7 +91,7 @@ public class Matrix {
             return startY + (startX - 1) * y;
         }
     }
-    private static int straight(int direct, int start){
+    public static int straight(int direct, int start){
         int startX = start / y;
         int startY = start % y;
         int directX = direct / y;
