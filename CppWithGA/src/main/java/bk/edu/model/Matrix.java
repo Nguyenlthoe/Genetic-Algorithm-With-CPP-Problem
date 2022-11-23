@@ -56,6 +56,7 @@ public class Matrix {
         int startY = start % y;
         int endX = end / y;
         int endY = end % y;
+        // todo: tim duong
         return points;
     }
 
