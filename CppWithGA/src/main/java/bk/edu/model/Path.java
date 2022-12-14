@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 public class Path {
-    List<Integer> points = new ArrayList<>();
+    List<Integer> chromosome = new ArrayList<>();
     List<Character> characters = new ArrayList<>();
 
     public int cost(){
@@ -24,12 +24,23 @@ public class Path {
 
     public Path copy(){
         Path cp = new Path();
-        for(int i = 0; i < this.points.size(); i++){
-            cp.points.add(this.points.get(i));
+        for(int i = 0; i < this.chromosome.size(); i++){
+            cp.chromosome.add(this.chromosome.get(i));
         }
         for(int i = 0; i < this.characters.size(); i++){
             cp.characters.add(this.characters.get(i));
         }
         return cp;
+    }
+
+    public void printPath(){
+        System.out.println("\nOperator:");
+        for(int i = 0; i < this.getChromosome().size(); i++){
+            System.out.print(this.getChromosome().get(i) + " ");
+        }
+        System.out.println("\nVectorPath:");
+        for (int i = 0; i < this.getCharacters().size(); i++){
+            System.out.print(this.getCharacters().get(i) + " ");
+        }
     }
 }
