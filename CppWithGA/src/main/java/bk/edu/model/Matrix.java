@@ -2,25 +2,32 @@ package bk.edu.model;
 
 import bk.edu.myfunction.MyFunction;
 
-import javax.print.DocFlavor;
 import java.util.*;
 
 public class Matrix {
-    public static int x = 8;
-    public static int y = 7;
-    public static int[][] map = {
-            {0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 1, 1, 0, 0, 0},
-            {0, 1, 1, 1, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0, 0, 0},};
+    public static int x = 14;
+    public static int y = 13;
+    public static final int[][] map = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0},
+            {0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
+            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0},
+            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0},
+            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},};
 
     public static void main(String[] args){
-        Path path = MyFunction.initRandomPath();
-        path.printPath();
+        for(int i = 0; i < 1000; i++){
+            Path path = MyFunction.initRandomPath();
+            path.printPath();
+        }
     }
     public List<Integer> initSolution() {
         Random rand = new Random();
