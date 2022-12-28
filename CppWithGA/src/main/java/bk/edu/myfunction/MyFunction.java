@@ -12,16 +12,21 @@ public class MyFunction {
     public static Path initRandomPath(){
         Path path = new Path();
         Random rand = new Random();
-        path.getChromosome().add(-7);
+        path.getOperator().add(-Matrix.y);
+        path.getOperator().add(0);
+        path.getChromosome().add(-Matrix.y);
         path.getChromosome().add(0);
-        path.getPosition().add(-7);
-        path.getPosition().add(0);
         boolean[] checkPoint = initCheckPoint(Matrix.x * Matrix.y);
         checkPoint[0] = true;
         while (!checkPathSuccess(checkPoint)){
-            int direct = path.getPosition().get(path.getPosition().size() -2);
-            int start = path.getPosition().get(path.getPosition().size() - 1);
+            int direct = path.getChromosome().get(path.getChromosome().size() -2);
+            int start = path.getChromosome().get(path.getChromosome().size() - 1);
             List<Integer> pointList = new ArrayList<>();
+
+            int straight = Matrix.straight(direct,start);
+            if(straight != -1 && !checkPoint[straight]){
+                pointList.add(straight);
+            }
 
             int left = Matrix.left(direct,start);
             if(left != -1 && !checkPoint[left]){
@@ -33,9 +38,78 @@ public class MyFunction {
                 pointList.add(right);
             }
 
+            if(pointList.size() == 0){
+//                path.printPath();
+//                System.out.println("\nList::");
+//                for(int i = 0; i < checkPoint.length; i++){
+//                    if(checkPoint[i]){
+//                        System.out.print(i + " ");
+//                    }
+//                }
+                Path nextPoint = findNextPoint(direct, start, checkPoint);
+                int nextchromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
+                path.getOperator().add(nextchromosome);
+                path.getCharacters().addAll(nextPoint.getCharacters());
+                path.getChromosome().addAll(nextPoint.getChromosome());
+                checkPoint[nextchromosome] = true;
+            } else {
+                int randomInt = rand.nextInt(pointList.size());
+                if(pointList.get(randomInt) == left){
+                    path.getOperator().add(left);
+                    path.getChromosome().add(left);
+                    path.getCharacters().add('l');
+                }
+
+                if(pointList.get(randomInt) == right){
+                    path.getOperator().add(right);
+                    path.getCharacters().add('r');
+                    path.getChromosome().add(right);
+                }
+                if(pointList.get(randomInt) == straight){
+                    path.getOperator().add(straight);
+                    path.getCharacters().add('s');
+                    path.getChromosome().add(straight);
+                }
+                checkPoint[pointList.get(randomInt)] = true;
+            }
+        }
+        path.getOperator().remove(0);
+        path.getChromosome().remove(0);
+        return path;
+    };
+    public static Path initRandomStraightPath(){
+        Path path = new Path();
+        Random rand = new Random();
+        path.getOperator().add(-Matrix.y);
+        path.getOperator().add(0);
+        path.getChromosome().add(-Matrix.y);
+        path.getChromosome().add(0);
+        boolean[] checkPoint = initCheckPoint(Matrix.x * Matrix.y);
+        checkPoint[0] = true;
+        while (!checkPathSuccess(checkPoint)){
+            int direct = path.getChromosome().get(path.getChromosome().size() -2);
+            int start = path.getChromosome().get(path.getChromosome().size() - 1);
+            List<Integer> pointList = new ArrayList<>();
+
             int straight = Matrix.straight(direct,start);
             if(straight != -1 && !checkPoint[straight]){
                 pointList.add(straight);
+            }
+            if(pointList.size() == 1){
+                path.getOperator().add(straight);
+                path.getCharacters().add('s');
+                path.getChromosome().add(straight);
+                checkPoint[straight] = true;
+                continue;
+            }
+            int left = Matrix.left(direct,start);
+            if(left != -1 && !checkPoint[left]){
+                pointList.add(left);
+            }
+
+            int right = Matrix.right(direct, start);
+            if(right != -1 && !checkPoint[right]){
+                pointList.add(right);
             }
 
             if(pointList.size() == 0){
@@ -47,36 +121,29 @@ public class MyFunction {
 //                    }
 //                }
                 Path nextPoint = findNextPoint(direct, start, checkPoint);
-                int nextPosition = nextPoint.getPosition().get(nextPoint.getPosition().size() - 1);
-                path.getChromosome().add(nextPosition);
+                int nextchromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
+                path.getOperator().add(nextchromosome);
                 path.getCharacters().addAll(nextPoint.getCharacters());
-                path.getPosition().addAll(nextPoint.getPosition());
-                checkPoint[nextPosition] = true;
+                path.getChromosome().addAll(nextPoint.getChromosome());
+                checkPoint[nextchromosome] = true;
             } else {
                 int randomInt = rand.nextInt(pointList.size());
                 if(pointList.get(randomInt) == left){
+                    path.getOperator().add(left);
                     path.getChromosome().add(left);
-                    path.getPosition().add(left);
                     path.getCharacters().add('l');
                 }
 
                 if(pointList.get(randomInt) == right){
-                    path.getChromosome().add(right);
+                    path.getOperator().add(right);
                     path.getCharacters().add('r');
-                    path.getPosition().add(right);
+                    path.getChromosome().add(right);
                 }
-
-                if(pointList.get(randomInt) == straight){
-                    path.getChromosome().add(straight);
-                    path.getCharacters().add('s');
-                    path.getPosition().add(straight);
-                }
-
                 checkPoint[pointList.get(randomInt)] = true;
             }
         }
+        path.getOperator().remove(0);
         path.getChromosome().remove(0);
-        path.getPosition().remove(0);
         return path;
     };
 
@@ -107,8 +174,8 @@ public class MyFunction {
     public static Path findNextPoint(int direct, int start, boolean[] checkPoint){
           List<Path> paths = new ArrayList<>();
           paths.add(new Path());
-          paths.get(0).getPosition().add(direct);
-          paths.get(0).getPosition().add(start);
+          paths.get(0).getChromosome().add(direct);
+          paths.get(0).getChromosome().add(start);
           boolean[] checkExistPoint = initCheckPoint(Matrix.x * Matrix.y);
           checkExistPoint[start] = true;
           while (true){
@@ -119,12 +186,12 @@ public class MyFunction {
                   System.out.println("\nNo Path Found");
                   return null;
               }
-              int directPath = path.getPosition().get(path.getPosition().size() -2);
-              int startPath = path.getPosition().get(path.getPosition().size() - 1);
+              int directPath = path.getChromosome().get(path.getChromosome().size() -2);
+              int startPath = path.getChromosome().get(path.getChromosome().size() - 1);
 
               if(!checkPoint[startPath] && startPath != start){
-                  path.getPosition().remove(0);
-                  path.getPosition().remove(0);
+                  path.getChromosome().remove(0);
+                  path.getChromosome().remove(0);
                   break;
               }
 
@@ -132,7 +199,7 @@ public class MyFunction {
               int left = Matrix.left(directPath,startPath);
               if(left != -1 && !checkExistPoint[left]){
                   Path leftPath = path.copy();
-                  leftPath.getPosition().add(left);
+                  leftPath.getChromosome().add(left);
                   leftPath.getCharacters().add('l');
                   checkExistPoint[left] = true;
 
@@ -145,7 +212,7 @@ public class MyFunction {
               int right = Matrix.right(directPath, startPath);
               if(right != -1 && !checkExistPoint[right]){
                   Path rightPath = path.copy();
-                  rightPath.getPosition().add(right);
+                  rightPath.getChromosome().add(right);
                   rightPath.getCharacters().add('r');
                   checkExistPoint[right] = true;
 
@@ -158,7 +225,7 @@ public class MyFunction {
               int straight = Matrix.straight(directPath,startPath);
               if(straight != -1 && !checkExistPoint[straight]){
                   Path straightPath = path.copy();
-                  straightPath.getPosition().add(straight);
+                  straightPath.getChromosome().add(straight);
                   straightPath.getCharacters().add('s');
                   checkExistPoint[straight] = true;
 
@@ -178,8 +245,8 @@ public class MyFunction {
         // todo: tim duong
         List<Path> pathList = new ArrayList<>();
         Path newPath= new Path();
-        newPath.getChromosome().add(direct);
-        newPath.getChromosome().add(start);
+        newPath.getOperator().add(direct);
+        newPath.getOperator().add(start);
         pathList.add(newPath);
         boolean[] checkAppear = new boolean[x * y];
         for(int i = 0; i < checkAppear.length; i++){
@@ -187,11 +254,11 @@ public class MyFunction {
         }
         Path finalPath;
         while (true) {
-            List<Integer> lastPoint = pathList.get(0).getChromosome();
+            List<Integer> lastPoint = pathList.get(0).getOperator();
             if(lastPoint.get(lastPoint.size() - 1) == end){
                 finalPath = pathList.get(0).copy();
-                finalPath.getChromosome().remove(0);
-                finalPath.getChromosome().remove(0);
+                finalPath.getOperator().remove(0);
+                finalPath.getOperator().remove(0);
                 break;
             } else {
                 Path path = pathList.get(0);
@@ -206,7 +273,7 @@ public class MyFunction {
                     if(!checkAppear[straight]){
                         Path straightPath = path.copy();
                         straightPath.getCharacters().add('s');
-                        straightPath.getChromosome().add(straight);
+                        straightPath.getOperator().add(straight);
                         pathList.add(straightPath);
                         checkAppear[straight] = true;
                     }
@@ -215,7 +282,7 @@ public class MyFunction {
                     if(!checkAppear[left]){
                         Path leftPath = path.copy();
                         leftPath.getCharacters().add('l');
-                        leftPath.getChromosome().add(left);
+                        leftPath.getOperator().add(left);
                         pathList.add(leftPath);
                         checkAppear[left] = true;
                     }
@@ -224,7 +291,7 @@ public class MyFunction {
                     if(!checkAppear[right]){
                         Path rightPath = path.copy();
                         rightPath.getCharacters().add('r');
-                        rightPath.getChromosome().add(right);
+                        rightPath.getOperator().add(right);
                         pathList.add(rightPath);
                         checkAppear[right] = true;
                     }

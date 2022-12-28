@@ -3,16 +3,18 @@ package bk.edu.ga;
 import bk.edu.model.Matrix;
 import bk.edu.model.Path;
 import bk.edu.myfunction.MyFunction;
+import lombok.Getter;
 
 import java.util.*;
-
+@Getter
 public class Populations {
     List<Path> parent = new ArrayList<>();
     private int size;
     public void initPopulations(int size){
         this.size = size;
-        for(int i = 0; i < size; i++){
+        for(int i = 0; i < size / 2; i++){
             parent.add(MyFunction.initRandomPath());
+            parent.add(MyFunction.initRandomStraightPath());
         }
         this.parent.sort(Path::compareTo);
     }
