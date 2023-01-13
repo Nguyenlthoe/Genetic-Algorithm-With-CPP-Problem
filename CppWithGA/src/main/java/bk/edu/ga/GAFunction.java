@@ -4,6 +4,7 @@ import bk.edu.model.Matrix;
 import bk.edu.model.Path;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -69,19 +70,22 @@ public class GAFunction {
         childPath.refactorPath();
         return childPath;
     }
-    public static List<Integer> randomOperator(int lengthoperator){
+    public static List<Integer> randomOperator(int lengthOperator){
         List<Integer> chromosome = new ArrayList<>();
         Random random = new Random();
         int ranInt = 0;
         while(ranInt == 0){
-            ranInt = random.nextInt(lengthoperator - 1);
+            ranInt = random.nextInt(lengthOperator - 1);
         }
         chromosome.add(ranInt);
         ranInt = 0;
         while(ranInt == 0){
-            ranInt = random.nextInt(lengthoperator - chromosome.get(0));
+            ranInt = random.nextInt(lengthOperator - 1);
         }
-        chromosome.add(chromosome.get(0) + ranInt);
+        chromosome.add(ranInt);
+
+        Collections.sort(chromosome);
         return chromosome;
     };
+
 }

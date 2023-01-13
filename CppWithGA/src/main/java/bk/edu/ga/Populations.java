@@ -12,9 +12,23 @@ public class Populations {
     private int size;
     public void initPopulations(int size){
         this.size = size;
-        for(int i = 0; i < size / 2; i++){
-            parent.add(MyFunction.initRandomPath());
-            parent.add(MyFunction.initRandomStraightPath());
+        for(int i = 0; i < 30; i++){
+            Path path = MyFunction.initZicZacPath();
+            if(!parent.contains(path)){
+                parent.add(path);
+            }
+        }
+        for(int i = 0; i < 50; i++){
+            Path path = MyFunction.initRandomStraightPath();
+            if(!parent.contains(path)){
+                parent.add(path);
+            }
+        }
+        while (parent.size() < 100){
+            Path path = MyFunction.initRandomPath();
+            if(!parent.contains(path)){
+                parent.add(path);
+            }
         }
         this.parent.sort(Path::compareTo);
     }
@@ -22,15 +36,27 @@ public class Populations {
     public void updatePopulations(){
         Random random = new Random();
         for(int i = 0; i < size; i++){
-            int index = 3;
             Path parent1 = this.parent.get(i);
-            while (index > 0){
-                index --;
-                int ranInt = random.nextInt(size);
+            int ranInt = random.nextInt(size);
+            if(statistic(80)){
                 List<Path> children = GAFunction.crossOver(parent1, this.parent.get(ranInt));
                 this.parent.addAll(children);
             }
-            this.parent.add(GAFunction.mutate(parent1));
+        }
+        for(int i = 0; i < size; i++){
+            Path parent1 = this.parent.get(i);
+            int ranInt = random.nextInt(size);
+            if(statistic(80)){
+                List<Path> children = GAFunction.crossOver(parent1, this.parent.get(ranInt));
+                this.parent.addAll(children);
+            }
+        }
+        int sizeNow = this.parent.size();
+        for(int i = 0; i < sizeNow; i++){
+            if(statistic(90)){
+                Path mutatePath = GAFunction.mutate(this.parent.get(i));
+                this.parent.add(mutatePath);
+            }
         }
         this.parent.sort(Path::compareTo);
         List<Path> finalParent = new ArrayList<>();
@@ -52,5 +78,13 @@ public class Populations {
     }
     public double getMinFitness(){
         return this.parent.get(0).cost();
+    }
+    public boolean statistic(int percent){
+        Random random = new Random();
+        int ranInt = random.nextInt(100);
+        if(ranInt < percent){
+            return true;
+        }
+        return false;
     }
 }

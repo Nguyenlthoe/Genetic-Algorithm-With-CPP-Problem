@@ -84,6 +84,7 @@ public class Path {
             }
             index++;
         }
+        this.chromosome.remove(0);
         this.operator = finalOperator;
     }
 

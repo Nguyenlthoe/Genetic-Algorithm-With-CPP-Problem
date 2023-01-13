@@ -39,19 +39,12 @@ public class MyFunction {
             }
 
             if(pointList.size() == 0){
-//                path.printPath();
-//                System.out.println("\nList::");
-//                for(int i = 0; i < checkPoint.length; i++){
-//                    if(checkPoint[i]){
-//                        System.out.print(i + " ");
-//                    }
-//                }
                 Path nextPoint = findNextPoint(direct, start, checkPoint);
-                int nextchromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
-                path.getOperator().add(nextchromosome);
+                int nextChromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
+                path.getOperator().add(nextChromosome);
                 path.getCharacters().addAll(nextPoint.getCharacters());
                 path.getChromosome().addAll(nextPoint.getChromosome());
-                checkPoint[nextchromosome] = true;
+                checkPoint[nextChromosome] = true;
             } else {
                 int randomInt = rand.nextInt(pointList.size());
                 if(pointList.get(randomInt) == left){
@@ -77,6 +70,102 @@ public class MyFunction {
         path.getChromosome().remove(0);
         return path;
     };
+
+    public static Path initZicZacPath(){
+        Path path = new Path();
+        Random rand = new Random();
+        path.getOperator().add(-Matrix.y);
+        path.getOperator().add(0);
+        path.getOperator().add(1);
+        path.getCharacters().add('r');
+        path.getChromosome().add(-Matrix.y);
+        path.getChromosome().add(0);
+        path.getChromosome().add(1);
+        boolean[] checkPoint = initCheckPoint(Matrix.x * Matrix.y);
+        checkPoint[0] = true;
+        checkPoint[1] = true;
+        while (!checkPathSuccess(checkPoint)){
+            int sizeNow = path.getChromosome().size();
+            int direct = path.getChromosome().get(sizeNow -2);
+            int start = path.getChromosome().get(sizeNow - 1);
+            int direct2 = path.getChromosome().get(sizeNow -3);
+            int straight = Matrix.straight(direct,start);
+            int left = Matrix.left(direct,start);
+            int right = Matrix.right(direct, start);
+
+            if(left != -1){
+                if(Matrix.left(start, left) == direct2){
+                    if(!checkPoint[left]){
+                        path.getOperator().add(left);
+                        path.getCharacters().add('l');
+                        path.getChromosome().add(left);
+                        checkPoint[left] = true;
+                        continue;
+                    }
+                }
+            }
+
+            if(right != -1){
+                if(Matrix.right(start, right) == direct2){
+                    if(!checkPoint[right]){
+                        path.getOperator().add(right);
+                        path.getCharacters().add('r');
+                        path.getChromosome().add(right);
+                        checkPoint[right] = true;
+                        continue;
+                    }
+                }
+            }
+
+            List<Integer> pointList = new ArrayList<>();
+
+
+            if(straight != -1 && !checkPoint[straight]){
+                pointList.add(straight);
+            }
+            if(pointList.size() == 1){
+                path.getOperator().add(straight);
+                path.getCharacters().add('s');
+                path.getChromosome().add(straight);
+                checkPoint[straight] = true;
+                continue;
+            }
+
+            if(left != -1 && !checkPoint[left]){
+                pointList.add(left);
+            }
+
+            if(right != -1 && !checkPoint[right]){
+                pointList.add(right);
+            }
+
+            if(pointList.size() == 0){
+                Path nextPoint = findNextPoint(direct, start, checkPoint);
+                int nextchromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
+                path.getOperator().add(nextchromosome);
+                path.getCharacters().addAll(nextPoint.getCharacters());
+                path.getChromosome().addAll(nextPoint.getChromosome());
+                checkPoint[nextchromosome] = true;
+            } else {
+                int randomInt = rand.nextInt(pointList.size());
+                if(pointList.get(randomInt) == left){
+                    path.getOperator().add(left);
+                    path.getChromosome().add(left);
+                    path.getCharacters().add('l');
+                }
+
+                if(pointList.get(randomInt) == right){
+                    path.getOperator().add(right);
+                    path.getCharacters().add('r');
+                    path.getChromosome().add(right);
+                }
+                checkPoint[pointList.get(randomInt)] = true;
+            }
+        }
+        path.getOperator().remove(0);
+        path.getChromosome().remove(0);
+        return path;
+    }
     public static Path initRandomStraightPath(){
         Path path = new Path();
         Random rand = new Random();
@@ -113,13 +202,6 @@ public class MyFunction {
             }
 
             if(pointList.size() == 0){
-//                path.printPath();
-//                System.out.println("\nList::");
-//                for(int i = 0; i < checkPoint.length; i++){
-//                    if(checkPoint[i]){
-//                        System.out.print(i + " ");
-//                    }
-//                }
                 Path nextPoint = findNextPoint(direct, start, checkPoint);
                 int nextchromosome = nextPoint.getChromosome().get(nextPoint.getChromosome().size() - 1);
                 path.getOperator().add(nextchromosome);
@@ -305,4 +387,12 @@ public class MyFunction {
         return finalPath;
     }
 
+    public static boolean statistic(int percent){
+        Random random = new Random();
+        int ranInt = random.nextInt(100);
+        if(ranInt < percent){
+            return true;
+        }
+        return false;
+    }
 }
