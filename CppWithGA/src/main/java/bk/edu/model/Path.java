@@ -12,21 +12,21 @@ public class Path {
     private List<Integer> operator = new ArrayList<>();
     private List<Character> characters = new ArrayList<>();
     private List<Integer> chromosome = new ArrayList<>();
-    private int fitness = 0;
+    private int cost = 0;
     public int cost(){
-        if(fitness == 0){
-            int cost = 0;
+        if(cost == 0){
+            int count = 0;
             for(int i = 0; i < characters.size(); i++){
                 if(characters.get(i).charValue() == 's'){
-                    cost += 2;
+                    count += 2;
                 } else {
-                    cost += 3;
+                    count += 3;
                 }
             }
-            fitness = cost;
+            cost = count;
         }
 
-        return fitness;
+        return cost;
     }
 
     public Path copy(){
@@ -64,6 +64,39 @@ public class Path {
         checkPoint[0] = true;
         int index = 1;
         int sizeChromosome;
+        while(!MyFunction.checkPathSuccess(checkPoint) && index < checkPoint.length){
+            if(checkPoint[this.getOperator().get(index)]){
+                index++;
+                continue;
+            }
+
+            sizeChromosome = this.getChromosome().size();
+            Path path = MyFunction.findPath(this.getChromosome().get(sizeChromosome - 1), this.getOperator().get(index),
+                    this.getChromosome().get(sizeChromosome - 2));
+            this.getCharacters().addAll(path.getCharacters());
+            this.getChromosome().addAll(path.getOperator());
+            for(int i = 0; i < path.getOperator().size(); i++){
+                int point = path.getOperator().get(i);
+                if(!checkPoint[point]){
+                    finalOperator.add(point);
+                    checkPoint[point] = true;
+                }
+            }
+            index++;
+        }
+        this.chromosome.remove(0);
+        this.operator = finalOperator;
+    }
+
+    public void refactorPath2(int start, int a){
+        boolean[] checkPoint = MyFunction.initCheckPoint(Matrix.x * Matrix.y);
+        List<Integer> finalOperator = new ArrayList<>();
+        finalOperator.add(this.getOperator().get(1));
+//        this.getChromosome().add(this.getOperator().get(0));
+//        this.getChromosome().add(0);
+        checkPoint[0] = true;
+        int index = 1;
+        int sizeChromosome;
         while(!MyFunction.checkPathSuccess(checkPoint)){
             if(checkPoint[this.getOperator().get(index)]){
                 index++;
@@ -89,7 +122,14 @@ public class Path {
     }
 
     public int compareTo(Object path){
-        return (this.cost() - ((Path) path).cost());
+        Path path2 = ((Path) path);
+        int pathCost = ((Path) path).cost();
+        if(pathCost != this.cost()){
+            return (this.cost() - pathCost);
+        } else{
+            return this.chromosome.size() - path2.chromosome.size() - this.operator.size() + path2.operator.size();
+        }
+
     }
 
     @Override
@@ -108,5 +148,10 @@ public class Path {
     @Override
     public int hashCode(){
         return this.cost();
+    }
+
+    public static void main (String[] args){
+        Path path = MyFunction.initRandomStraightPath();
+        System.out.println(path.getOperator().get(0));
     }
 }

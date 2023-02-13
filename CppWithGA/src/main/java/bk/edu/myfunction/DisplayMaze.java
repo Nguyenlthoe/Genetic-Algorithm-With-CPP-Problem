@@ -170,7 +170,7 @@ public class DisplayMaze extends JPanel {
 
         for(int i = 1; i < chromosome.size(); i++){
             try {
-                Thread.sleep(200);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

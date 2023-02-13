@@ -26,12 +26,13 @@ public class Matrix {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+//            {0, 0, 0, 0, 0, 0},
+//            {0, 0, 0, 0, 0, 0},
+//            {0, 0, 1, 1, 0, 0},
+//            {0, 0, 1, 1, 0, 0},};
 
     public static void main(String[] args){
-        for(int i = 0; i < 1000; i++){
-            Path path = MyFunction.initRandomPath();
-            path.printPath();
-        }
+        System.out.println(Matrix.left(-18, 0));
     }
     public List<Integer> initSolution() {
         Random rand = new Random();
@@ -73,7 +74,7 @@ public class Matrix {
         int directX = direct / y;
         int directY = direct % y;
         if(directX - startX == 1){
-            if(directY - 1 < 0){
+            if(startY - 1 < 0){
                 return -1;
             }
             if(map[startX][startY-1] == 1){
