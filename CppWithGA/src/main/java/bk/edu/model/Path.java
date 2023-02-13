@@ -2,12 +2,14 @@ package bk.edu.model;
 
 import bk.edu.myfunction.MyFunction;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Getter
+@Setter
 public class Path {
     private List<Integer> operator = new ArrayList<>();
     private List<Character> characters = new ArrayList<>();
@@ -64,7 +66,7 @@ public class Path {
         checkPoint[0] = true;
         int index = 1;
         int sizeChromosome;
-        while(!MyFunction.checkPathSuccess(checkPoint) && index < checkPoint.length){
+        while(!MyFunction.checkPathSuccess(checkPoint)){
             if(checkPoint[this.getOperator().get(index)]){
                 index++;
                 continue;

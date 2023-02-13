@@ -20,7 +20,7 @@ public class Main {
 //        System.out.println("----------------------------");
         System.out.println(populations.getMinFitness());
 //        System.out.println("----------------------------");
-        for(int i = 0; i < 150; i++){
+        for(int i = 0; i < 400; i++){
             populations.updatePopulations();
 //            if(populations.getParent().get(0).cost() == populations.getParent().get(50).cost()){
 //                break;

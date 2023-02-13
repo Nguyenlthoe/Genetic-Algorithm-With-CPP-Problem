@@ -72,16 +72,16 @@ public class GAFunction {
         List<Integer> part2 = new ArrayList<>();
 
         int start1 = parent1.getOperator().get(chromosome.get(0));
-        System.out.println(chromosome1.size());
-        System.out.println(chromosome1.indexOf(start1) + " start1 " + chromosome1.indexOf(parent1.getOperator().get(chromosome.get(1))));
+//        System.out.println(chromosome1.size());
+//        System.out.println(chromosome1.indexOf(start1) + " start1 " + chromosome1.indexOf(parent1.getOperator().get(chromosome.get(1))));
         for(int i = chromosome1.indexOf(start1);
             i <=  chromosome1.indexOf(parent1.getOperator().get(chromosome.get(1))); i++){
             part1.add(chromosome1.get(i));
         }
 
         int start2 = parent2.getOperator().get(chromosome.get(0));
-        System.out.println(chromosome2.size());
-        System.out.println(chromosome2.indexOf(start2) + " start2 " + chromosome2.indexOf(parent2.getOperator().get(chromosome.get(1))));
+//        System.out.println(chromosome2.size());
+//        System.out.println(chromosome2.indexOf(start2) + " start2 " + chromosome2.indexOf(parent2.getOperator().get(chromosome.get(1))));
         for(int i = chromosome2.indexOf(start2);
             i <=  chromosome2.indexOf(parent2.getOperator().get(chromosome.get(1))); i++){
             part2.add(chromosome2.get(i));
@@ -119,11 +119,15 @@ public class GAFunction {
                 }
             }
 
-            int index = child1.getOperator().size() - 1;
+            int index = child1.getOperator().size();
             for(int i = 0; i < parent1.getOperator().size(); i++){
                 if(!child1.getOperator().contains(parent1.getOperator().get(i))){
                     child1.getOperator().add(parent1.getOperator().get(i));
                 }
+            }
+            List<Integer> finalOperator = new ArrayList<>();
+            for(int i = 0; i < index; i++){
+                finalOperator.add(child1.getOperator().get(i));
             }
             while(!MyFunction.checkPathSuccess(check1)){
                 if(check1[child1.getOperator().get(index)]){
@@ -139,23 +143,14 @@ public class GAFunction {
                 for(int i = 0; i < path.getOperator().size(); i++){
                     int point = path.getOperator().get(i);
                     if(!check1[point]){
+                        finalOperator.add(point);
                         check1[point] = true;
                     }
                 }
                 index++;
             }
             child1.getChromosome().remove(0);
-            boolean[] checkOp = MyFunction.initCheckPoint(Matrix.x * Matrix.y);
-            int indexx = 0;
-            for(int i = 0; i < child1.getChromosome().size(); i++){
-                if(!checkOp[child1.getChromosome().get(i)]){
-                    checkOp[child1.getChromosome().get(i)] = true;
-                    indexx++;
-                    if(child1.getChromosome().get(i) != child1.getOperator().get(indexx)){
-                        System.out.println("hello");
-                    }
-                }
-            }
+            child1.setOperator(finalOperator);
             childPath.add(child1);
         }
         ////
@@ -187,11 +182,16 @@ public class GAFunction {
                     check2[child2.getChromosome().get(i + 1)] = true;
                 }
             }
-            int index = child2.getOperator().size() - 1;
+            int index = child2.getOperator().size();
             for(int i = 0; i < parent2.getOperator().size(); i++){
                 if(!child2.getOperator().contains(parent2.getOperator().get(i))){
                     child2.getOperator().add(parent2.getOperator().get(i));
                 }
+            }
+
+            List<Integer> finalOperator = new ArrayList<>();
+            for(int i = 0; i < index; i++){
+                finalOperator.add(child2.getOperator().get(i));
             }
             while(!MyFunction.checkPathSuccess(check2)){
                 if(check2[child2.getOperator().get(index)]){
@@ -207,12 +207,14 @@ public class GAFunction {
                 for(int i = 0; i < path.getOperator().size(); i++){
                     int point = path.getOperator().get(i);
                     if(!check2[point]){
+                        finalOperator.add(point);
                         check2[point] = true;
                     }
                 }
                 index++;
             }
             child2.getChromosome().remove(0);
+            child2.setOperator(finalOperator);
             childPath.add(child2);
         }
         return childPath;

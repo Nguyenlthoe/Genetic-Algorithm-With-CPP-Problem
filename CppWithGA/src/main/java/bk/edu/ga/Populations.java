@@ -65,6 +65,12 @@ public class Populations {
                 this.parent.addAll(children);
             }
         }
+        for(int i = 0; i < parent.size(); i++){
+            if(statistic(90)){
+                Path mutatePath = GAFunction.mutate(parent.get(i));
+                parent.add(mutatePath);
+            }
+        }
         this.parent.sort(Path::compareTo);
         List<Path> finalParent = new ArrayList<>();
         int index = 0;
