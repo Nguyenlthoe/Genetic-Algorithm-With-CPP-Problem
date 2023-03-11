@@ -151,9 +151,9 @@ public class DisplayMaze extends JPanel {
             }
         }
     }
-    public static void showSolution(List<Integer> chromosome){
-        final int x = 700;
-        final int y = 700;
+    public static void showSolution(List<Integer> chromosome, long time){
+        final int x = 1000;
+        final int y = 1000;
         JFrame frame = new JFrame();
         frame.setSize(x, y);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,14 +163,14 @@ public class DisplayMaze extends JPanel {
                 matrix[i][j] = Matrix.map[i][j];
             }
         }
-        DisplayMaze displayMaze = new DisplayMaze(18,18,0,0, matrix);
+        DisplayMaze displayMaze = new DisplayMaze(Matrix.x,Matrix.y,0,0, matrix);
         displayMaze.repaint();
         frame.add(displayMaze);
         frame.setVisible(true);
 
         for(int i = 1; i < chromosome.size(); i++){
             try {
-                Thread.sleep(300);
+                Thread.sleep(time);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -180,9 +180,11 @@ public class DisplayMaze extends JPanel {
             postX = chromosome.get(i) / Matrix.y;
             postY = chromosome.get(i) % Matrix.y;
             matrix[postX][postY] = 3;
-            displayMaze =  new DisplayMaze(18,18,0,0, matrix);
+            displayMaze =  new DisplayMaze(Matrix.x,Matrix.y,0,0, matrix);
             displayMaze.repaint();
             frame.repaint();
         }
+
+        frame.dispose();
     }
 }

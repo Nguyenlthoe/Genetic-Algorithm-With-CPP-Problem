@@ -13,30 +13,124 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Populations populations = new Populations();
-        populations.initPopulations(100);
-        populations.getParent().get(0).printPath();
-//        populations.displayPopulations();
-//        System.out.println("----------------------------");
-        System.out.println(populations.getMinFitness());
-//        System.out.println("----------------------------");
-        for(int i = 0; i < 400; i++){
-            populations.updatePopulations();
-//            if(populations.getParent().get(0).cost() == populations.getParent().get(50).cost()){
-//                break;
+        int minCost = 1000;
+        int maxCost = 0;
+        int sumCost = 0;
+        int minDuplicate = 1000;
+        int sumDuplicate = 0;
+        long minTime = 999999999999999L;
+        long maxTime = 0;
+        long sumTime = 0;
+        int number = 1;
+        int minCost2 = 1000;
+        int maxCost2 = 0;
+        int sumCost2 = 0;
+        int minDuplicate2 = 1000;
+        int sumDuplicate2 = 0;
+        long minTime2 = 999999999999999L;
+        long maxTime2 = 0;
+        long sumTime2 = 0;
+
+        for(int k = 0; k < number; k++){
+            Populations populations = new Populations();
+
+            populations.initPopulations(200);
+
+            Populations populations2 = populations.copy();
+            System.out.println("----------------------------");
+            DisplayMaze.showSolution(populations.getParent().get(0).getChromosome(), 50);
+            long startTime = System.currentTimeMillis();
+            for(int i = 0; i < 500; i++){
+                populations.updatePopulations();
+//                if(populations.getParent().get(0).cost() == populations.getParent().get(populations.getParent().size() - 1).cost()){
+//                    break;
+//                }
+                System.out.println("Min: " + populations.getMinFitness() + " | Max: " + populations.getParent().get(populations.getParent().size() - 1).cost());
+
+//                populations.getParent().get(0).printPath();
+//
+//                populations.getParent().get(1).printPath();
+            }
+
+            DisplayMaze.showSolution(populations.getParent().get(0).getChromosome(), 200);
+//            long timeProcess = System.currentTimeMillis() - startTime;
+//            sumTime += timeProcess;
+//            if(minTime > timeProcess){
+//                minTime = timeProcess;
 //            }
-//            populations.displayPopulations();
-            System.out.println("Min: " + populations.getMinFitness() + " | Max: " + populations.getParent().get(99).cost());
+//            if(maxTime < timeProcess){
+//                maxTime = timeProcess;
+//            }
+//            Path path = populations.getParent().get(0);
+//            int duplicatePath = path.getChromosome().size() - path.getOperator().size();
+//            if(minDuplicate > duplicatePath){
+//                minDuplicate = duplicatePath;
+//            }
+//            sumDuplicate += duplicatePath;
+//            if(path.getCost() < minCost){
+//                minCost = path.getCost();
+//            }
+//            if(path.getCost() > maxCost){
+//                maxCost = path.getCost();
+//            }
+//            sumCost += path.getCost();
+//
+//            long startTime2 = System.currentTimeMillis();
+//            for(int i = 0; i < 300; i++){
+//                populations2.updatePopulations2();
+////                if(populations.getParent().get(0).cost() == populations.getParent().get(populations.getParent().size() - 1).cost()){
+////                    break;
+////                }
+////                System.out.println("Min: " + populations.getMinFitness() + " | Max: " + populations.getParent().get(99).cost());
+//
+////                populations.getParent().get(0).printPath();
+////
+////                populations.getParent().get(1).printPath();
+////
+//            }
+
+//            DisplayMaze.showSolution(populations2.getParent().get(0).getChromosome());
+//            long timeProcess2 = System.currentTimeMillis() - startTime2;
+//            sumTime2 += timeProcess2;
+//            if(minTime2 > timeProcess2){
+//                minTime2 = timeProcess2;
+//            }
+//            if(maxTime2 < timeProcess2){
+//                maxTime2 = timeProcess2;
+//            }
+//            Path path2 = populations.getParent().get(0);
+//            int duplicatePath2 = path2.getChromosome().size() - path2.getOperator().size();
+//            if(minDuplicate2 > duplicatePath2){
+//                minDuplicate2 = duplicatePath2;
+//            }
+//            sumDuplicate2 += duplicatePath;
+//            if(path2.getCost() < minCost2){
+//                minCost2 = path2.getCost();
+//            }
+//            if(path2.getCost() > maxCost2){
+//                maxCost2 = path2.getCost();
+//            }
+//            sumCost2 += path2.getCost();
         }
-        populations.getParent().get(0).printPath();
+//        System.out.println("Min cost: "  + minCost2);
+//        System.out.println("Max cost: " + maxCost2);
+//        System.out.println("Average cost: " + sumCost2 * 1.0 / number);
+//        System.out.println("Min duplicate: " + minDuplicate2);
+//        System.out.println("Average duplicate: " + sumDuplicate2 * 1.0 / number);
+//        System.out.println("Min time: " + minTime2);
+//        System.out.println("Max time: " + maxTime2);
+//        System.out.println("Average time " + sumTime2 * 1.0/ number);
+//
+//        System.out.println("Min cost: "  + minCost);
+//        System.out.println("Max cost: " + maxCost);
+//        System.out.println("Average cost: " + sumCost * 1.0 / number);
+//        System.out.println("Min duplicate: " + minDuplicate);
+//        System.out.println("Average duplicate: " + sumDuplicate * 1.0 / number);
+//        System.out.println("Min time: " + minTime);
+//        System.out.println("Max time: " + maxTime);
+//        System.out.println("Average time " + sumTime * 1.0/ number);
 
-        populations.getParent().get(1).printPath();
 
-        DisplayMaze.showSolution(populations.getParent().get(0).getChromosome());
-
-//        DisplayMaze.showSolution(populations.getParent().get(15).getChromosome());
-
-        DisplayMaze.showSolution(populations.getParent().get(1).getChromosome());
 
 //        System.out.println(populations.getParent().get(99).cost());
 //        Path authorPath = new Path();

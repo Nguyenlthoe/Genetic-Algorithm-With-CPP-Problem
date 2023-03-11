@@ -73,8 +73,13 @@ public class Path {
             }
 
             sizeChromosome = this.getChromosome().size();
+            
             Path path = MyFunction.findPath(this.getChromosome().get(sizeChromosome - 1), this.getOperator().get(index),
-                    this.getChromosome().get(sizeChromosome - 2));
+                    this.getChromosome().get(sizeChromosome - 2),  checkPoint);
+            if(path == null){
+                path = MyFunction.findPath(this.getChromosome().get(sizeChromosome - 1), this.getOperator().get(index),
+                        this.getChromosome().get(sizeChromosome - 2));
+            }
             this.getCharacters().addAll(path.getCharacters());
             this.getChromosome().addAll(path.getOperator());
             for(int i = 0; i < path.getOperator().size(); i++){

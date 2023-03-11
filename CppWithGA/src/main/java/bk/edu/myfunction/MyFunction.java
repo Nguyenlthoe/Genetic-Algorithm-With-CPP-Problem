@@ -386,6 +386,80 @@ public class MyFunction {
         }
         return finalPath;
     }
+    public static Path findPath(int start, int end, int direct, boolean[] check) {
+        int x = Matrix.x;
+        int y = Matrix.y;
+        List<Integer> points = new ArrayList<>();
+        // todo: tim duong
+        List<Path> pathList = new ArrayList<>();
+        Path newPath= new Path();
+        newPath.getOperator().add(direct);
+        newPath.getOperator().add(start);
+        pathList.add(newPath);
+        boolean[] checkAppear = new boolean[x * y];
+        for(int i = 0; i < checkAppear.length; i++){
+            checkAppear[i] = false;
+        }
+        Path finalPath;
+        while (true) {
+            if(pathList.size() == 0){
+                return null;
+            }
+            List<Integer> lastPoint = pathList.get(0).getOperator();
+            if(lastPoint.get(lastPoint.size() - 1) == end){
+                finalPath = pathList.get(0).copy();
+                finalPath.getOperator().remove(0);
+                finalPath.getOperator().remove(0);
+                break;
+            } else {
+                Path path = pathList.get(0);
+                int directA = lastPoint.get(lastPoint.size() - 2);
+                int startA = lastPoint.get(lastPoint.size() - 1);
+                checkAppear[startA] = true;
+                pathList.remove(0);
+                int straight = Matrix.straight(directA, startA);
+                int left = Matrix.left(directA, startA);
+                int right = Matrix.right(directA, startA);
+                if(straight >= 0 && straight < x * y){
+                    if(!check[straight]){
+                        if(!checkAppear[straight]){
+                            Path straightPath = path.copy();
+                            straightPath.getCharacters().add('s');
+                            straightPath.getOperator().add(straight);
+                            pathList.add(straightPath);
+                            checkAppear[straight] = true;
+                        }
+                    }
+                }
+                if(left >= 0 && left < x * y){
+                    if(!check[left]){
+                        if(!checkAppear[left]){
+                            Path leftPath = path.copy();
+                            leftPath.getCharacters().add('l');
+                            leftPath.getOperator().add(left);
+                            pathList.add(leftPath);
+                            checkAppear[left] = true;
+                        }
+                    }
+                }
+                if(right >= 0 && right < x * y){
+                    if(!checkAppear[right]){
+                        if(!checkAppear[right]){
+                            Path rightPath = path.copy();
+                            rightPath.getCharacters().add('r');
+                            rightPath.getOperator().add(right);
+                            pathList.add(rightPath);
+                            checkAppear[right] = true;
+                        }
+                    }
+                }
+                Collections.sort(pathList, (path1, t1) -> {
+                    return (int)(path1.cost() - t1.cost());
+                });
+            }
+        }
+        return finalPath;
+    }
 
     public static boolean statistic(int percent){
         Random random = new Random();

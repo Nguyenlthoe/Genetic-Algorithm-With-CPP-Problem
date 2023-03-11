@@ -96,6 +96,10 @@ public class GAFunction {
         }
         Path semiPath1 = MyFunction.findPath(child1.getChromosome().get(child1.getChromosome().size() - 1),
                 part2.get(0), child1.getChromosome().get(child1.getChromosome().size() - 2));
+//        if(semiPath1 == null){
+//            semiPath1 = MyFunction.findPath(child1.getChromosome().get(child1.getChromosome().size() - 1),
+//                    part2.get(0), child1.getChromosome().get(child1.getChromosome().size() - 2));
+//        }
         child1.getChromosome().addAll(semiPath1.getOperator());
 
         if(!child1.getChromosome().get(child1.getChromosome().size() - 2).equals(part2.get(1))){
@@ -137,7 +141,11 @@ public class GAFunction {
 
                 int sizeChromosome = child1.getChromosome().size();
                 Path path = MyFunction.findPath(child1.getChromosome().get(sizeChromosome - 1), child1.getOperator().get(index),
-                        child1.getChromosome().get(sizeChromosome - 2));
+                        child1.getChromosome().get(sizeChromosome - 2), check1);
+                if(path == null){
+                    path = MyFunction.findPath(child1.getChromosome().get(sizeChromosome - 1), child1.getOperator().get(index),
+                            child1.getChromosome().get(sizeChromosome - 2));
+                }
                 child1.getCharacters().addAll(path.getCharacters());
                 child1.getChromosome().addAll(path.getOperator());
                 for(int i = 0; i < path.getOperator().size(); i++){
@@ -201,7 +209,11 @@ public class GAFunction {
 
                 int sizeChromosome = child2.getChromosome().size();
                 Path path = MyFunction.findPath(child2.getChromosome().get(sizeChromosome - 1), child2.getOperator().get(index),
-                        child2.getChromosome().get(sizeChromosome - 2));
+                        child2.getChromosome().get(sizeChromosome - 2), check2);
+                if(path == null){
+                    path = MyFunction.findPath(child2.getChromosome().get(sizeChromosome - 1), child2.getOperator().get(index),
+                            child2.getChromosome().get(sizeChromosome - 2));
+                }
                 child2.getCharacters().addAll(path.getCharacters());
                 child2.getChromosome().addAll(path.getOperator());
                 for(int i = 0; i < path.getOperator().size(); i++){
@@ -224,9 +236,8 @@ public class GAFunction {
         Path childPath = parent.copy();
         List<Integer> chromosome = randomOperator(parent.getOperator().size());
         int value1 = childPath.getOperator().get(chromosome.get(0));
-        int value2 = childPath.getOperator().get(chromosome.get(1));
-        childPath.getOperator().set(chromosome.get(0), value2);
-        childPath.getOperator().set(chromosome.get(1), value1);
+        childPath.getOperator().remove(Integer.valueOf(value1));
+        childPath.getOperator().add(chromosome.get(1), value1);
         childPath.refactorPath();
         return childPath;
     }

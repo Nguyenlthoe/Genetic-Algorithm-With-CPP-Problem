@@ -4,9 +4,11 @@ import bk.edu.model.Matrix;
 import bk.edu.model.Path;
 import bk.edu.myfunction.MyFunction;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 @Getter
+@Setter
 public class Populations {
     List<Path> parent = new ArrayList<>();
     private int size;
@@ -17,8 +19,8 @@ public class Populations {
 //        authorPath.getOperator().addAll(Arrays.asList(operator));
 //        authorPath.refactorPath();
 //        System.out.println(authorPath.cost());
-      //parent.add(authorPath);
-        for(int i = 0; i < 20; i++){
+//        parent.add(authorPath);
+        for(int i = 0; i < 40; i++){
             Path path = MyFunction.initZicZacPath();
             if(!parent.contains(path)){
                 parent.add(path);
@@ -30,33 +32,65 @@ public class Populations {
                 parent.add(path);
             }
         }
-        while (parent.size() < 100){
+        while (parent.size() < size * 2){
             Path path = MyFunction.initRandomPath();
             if(!parent.contains(path)){
                 parent.add(path);
             }
         }
         this.parent.sort(Path::compareTo);
+        List<Path> finalParent = new ArrayList<>();
+        int index = 0;
+        while (finalParent.size() < size){
+            if(!finalParent.contains(this.parent.get(index))){
+                finalParent.add(this.parent.get(index));
+            }
+            index++;
+        }
+        this.parent.clear();
+        this.parent = finalParent;
     }
 
     public void updatePopulations(){
+        List<Path> finalParent2 = new ArrayList<>();
+        for(int i = 0; i < parent.size(); i++){
+            if(statistic(5)){
+                finalParent2.add(GAFunction.mutate(parent.get(i)));
+            } else {
+                finalParent2.add(parent.get(i));
+            }
+        }
+        this.parent.clear();
+        this.parent = finalParent2;
         Random random = new Random();
-//        for(int i = 0; i < size; i++){
-//            Path parent1 = this.parent.get(i);
-//            int ranInt = random.nextInt(size);
-//            if(statistic(80)){
-//                List<Path> children = GAFunction.crossOver(parent1, this.parent.get(ranInt));
-//                this.parent.addAll(children);
+        for(int i = 0; i < size; i++){
+            Path parent1 = this.parent.get(i);
+            int ranInt = random.nextInt(size);
+            if(statistic(80)){
+                List<Path> children = GAFunction.crossOver(parent1, this.parent.get(ranInt));
+                this.parent.addAll(children);
+            }
+//            if(statistic(90)){
+//                parent.add(GAFunction.mutate(parent1));
 //            }
-//        }
-//        for(int i = 0; i < size; i++){
-//            Path parent1 = this.parent.get(i);
-//            int ranInt = random.nextInt(size);
-//            if(statistic(80)){
-//                List<Path> children = GAFunction.crossOver(parent1, this.parent.get(ranInt));
-//                this.parent.addAll(children);
-//            }
-//        }
+        }
+        this.parent.sort(Path::compareTo);
+        List<Path> finalParent = new ArrayList<>();
+        int index = 0;
+        while (finalParent.size() < size){
+            if(!finalParent.contains(this.parent.get(index))){
+                finalParent.add(this.parent.get(index));
+            }
+            index++;
+        }
+
+
+        this.parent.clear();
+        this.parent = finalParent;
+    }
+
+    public void updatePopulations2(){
+        Random random = new Random();
         for(int i = 0; i < size; i++){
             Path parent1 = this.parent.get(i);
             int ranInt = random.nextInt(size);
@@ -64,11 +98,8 @@ public class Populations {
                 List<Path> children = GAFunction.crossOver2(parent1, this.parent.get(ranInt));
                 this.parent.addAll(children);
             }
-        }
-        for(int i = 0; i < parent.size(); i++){
             if(statistic(90)){
-                Path mutatePath = GAFunction.mutate(parent.get(i));
-                parent.add(mutatePath);
+                parent.add(GAFunction.mutate(parent1));
             }
         }
         this.parent.sort(Path::compareTo);
@@ -99,5 +130,16 @@ public class Populations {
             return true;
         }
         return false;
+    }
+
+    public Populations copy(){
+        List<Path> paths = new ArrayList<>();
+        Populations populations = new Populations();
+        for(int i = 0; i < this.size; i++){
+            paths.add(this.parent.get(i));
+        }
+        populations.setSize(this.size);
+        populations.setParent(paths);
+        return populations;
     }
 }
